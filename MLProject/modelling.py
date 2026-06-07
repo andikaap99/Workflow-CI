@@ -96,6 +96,7 @@ def run_modelling(data_dir):
 
         model = LinearRegression()
         model.fit(X_train, y_train)
+        mlflow.sklearn.log_model(model, artifact_path="model")
 
         y_pred_val  = model.predict(X_val)
         y_pred_test = model.predict(X_test)
