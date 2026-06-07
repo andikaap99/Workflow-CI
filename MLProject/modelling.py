@@ -9,27 +9,20 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import os
 
-# ──────────────────────────────────────────────
-# CONSTANTS
-# ──────────────────────────────────────────────
+
 COFFEE_COLS = [
     'Americano', 'Americano with Milk', 'Cappuccino',
     'Cocoa', 'Cortado', 'Espresso', 'Hot Chocolate', 'Latte'
 ]
 
 
-# ──────────────────────────────────────────────
-# ARGUMENT PARSER
-# ──────────────────────────────────────────────
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--data_dir', type=str, default='coffee_sales_preprocessing')
     return parser.parse_args()
 
 
-# ──────────────────────────────────────────────
-# LOAD DATA
-# ──────────────────────────────────────────────
+## load data
 def load_data(data_dir):
     X_train = pd.read_csv(f'{data_dir}/X_train.csv').values
     X_val   = pd.read_csv(f'{data_dir}/X_val.csv').values
@@ -41,9 +34,7 @@ def load_data(data_dir):
     return X_train, X_val, X_test, y_train, y_val, y_test
 
 
-# ──────────────────────────────────────────────
-# EVALUATE
-# ──────────────────────────────────────────────
+## evaluate
 def evaluate(y_true, y_pred, prefix=''):
     metrics = {}
     for i, col in enumerate(COFFEE_COLS):
@@ -56,9 +47,7 @@ def evaluate(y_true, y_pred, prefix=''):
     return metrics
 
 
-# ──────────────────────────────────────────────
-# ARTEFAK 1: PLOT PREDIKSI VS AKTUAL
-# ──────────────────────────────────────────────
+## prediction vs actual
 def plot_prediction_vs_actual(y_true, y_pred):
     fig, axes = plt.subplots(4, 2, figsize=(14, 16))
     axes = axes.flatten()
@@ -75,9 +64,7 @@ def plot_prediction_vs_actual(y_true, y_pred):
     return path
 
 
-# ──────────────────────────────────────────────
-# ARTEFAK 2: FEATURE IMPORTANCE
-# ──────────────────────────────────────────────
+## feature importance
 def plot_feature_importance(model, feature_cols):
     importance = np.abs(model.coef_).mean(axis=0)
     feat_imp = pd.Series(importance, index=feature_cols).sort_values(ascending=False).head(20)
@@ -92,9 +79,7 @@ def plot_feature_importance(model, feature_cols):
     return path
 
 
-# ──────────────────────────────────────────────
-# MAIN
-# ──────────────────────────────────────────────
+## main
 def run_modelling(data_dir):
     dagshub.init(
         repo_owner='andikaap99',
