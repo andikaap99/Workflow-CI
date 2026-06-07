@@ -22,7 +22,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install mlflow dagshub pandas numpy scikit-learn matplotlib conda
+          pip install mlflow dagshub pandas numpy scikit-learn matplotlib
 
       - name: Run MLflow Project
         env:
