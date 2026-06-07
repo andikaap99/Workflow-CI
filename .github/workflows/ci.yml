@@ -40,9 +40,11 @@ jobs:
           git push
 
       - name: Build Docker Image
+        env:
+          DAGSHUB_USER_TOKEN: ${{ secrets.DAGSHUB_USER_TOKEN }}
         run: |
           mlflow models build-docker \
-            --model-uri "models:/coffee_sales_forecasting/latest" \
+            --model-uri "runs:/$(cat run_id.txt)/model" \
             --name "coffee-sales-model"
 
       - name: Push ke Docker Hub

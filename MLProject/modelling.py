@@ -91,7 +91,7 @@ def run_modelling(data_dir):
 
     mlflow.set_experiment("coffee_sales_forecasting")
     os.environ.pop('MLFLOW_RUN_ID', None)
-    with mlflow.start_run(run_name="MLR_baseline_CI"):
+    with mlflow.start_run(run_name="MLR_baseline_CI") as run:
         mlflow.sklearn.autolog()
 
         model = LinearRegression()
@@ -110,6 +110,9 @@ def run_modelling(data_dir):
 
         path_feat = plot_feature_importance(model, feature_cols)
         mlflow.log_artifact(path_feat)
+
+        with open('run_id.txt', 'w') as f:
+            f.write(run.info.run_id)
 
         print("\n=== TEST METRICS ===")
         for k, v in test_metrics.items():
