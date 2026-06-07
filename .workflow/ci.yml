@@ -1,0 +1,54 @@
+name: Workflow CI - Coffee Sales MLflow
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'MLProject/**'
+
+jobs:
+  mlflow-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install mlflow dagshub pandas numpy scikit-learn matplotlib conda
+
+      - name: Run MLflow Project
+        env:
+          DAGSHUB_USER_TOKEN: ${{ secrets.DAGSHUB_USER_TOKEN }}
+        run: |
+          mlflow run MLProject/ --env-manager=local
+
+      - name: Save artefak ke GitHub
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add MLProject/plot_*.png
+          git commit -m "Auto: update artefak hasil training" || echo "No changes to commit"
+          git push
+
+      - name: Build Docker Image
+        run: |
+          mlflow models build-docker \
+            --model-uri "models:/coffee_sales_forecasting/latest" \
+            --name "coffee-sales-model"
+
+      - name: Push ke Docker Hub
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+          docker tag coffee-sales-model $DOCKER_USERNAME/coffee-sales-model:latest
+          docker push $DOCKER_USERNAME/coffee-sales-model:latest
