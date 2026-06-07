@@ -63,7 +63,6 @@ def plot_prediction_vs_actual(y_true, y_pred):
     plt.close()
     return path
 
-
 ## feature importance
 def plot_feature_importance(model, feature_cols):
     importance = np.abs(model.coef_).mean(axis=0)
