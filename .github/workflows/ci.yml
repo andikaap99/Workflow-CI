@@ -43,12 +43,9 @@ jobs:
         env:
           DAGSHUB_USER_TOKEN: ${{ secrets.DAGSHUB_USER_TOKEN }}
         run: |
-          RUN_ID=$(cat MLProject/run_id.txt)
-          export MLFLOW_TRACKING_URI=https://dagshub.com/andikaap99/Eksperimen_SML_Andika-Aryadi-Putra.mlflow
-          export MLFLOW_TRACKING_USERNAME=andikaap99
-          export MLFLOW_TRACKING_PASSWORD=${{ secrets.DAGSHUB_USER_TOKEN }}
+          run: |
           mlflow models build-docker \
-            --model-uri "runs:/${RUN_ID}/model" \
+            --model-uri "MLProject/local_model" \
             --name "coffee-sales-model"
 
       - name: Push ke Docker Hub

@@ -5,6 +5,7 @@ import mlflow
 import mlflow.sklearn
 import dagshub
 import matplotlib.pyplot as plt
+import mlflow.sklearn as msk
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import os
@@ -111,6 +112,9 @@ def run_modelling(data_dir):
 
         path_feat = plot_feature_importance(model, feature_cols)
         mlflow.log_artifact(path_feat)
+
+        mlflow.sklearn.log_model(model, artifact_path="model")
+        msk.save_model(model, path="local_model")
 
         with open('run_id.txt', 'w') as f:
             f.write(run.info.run_id)
