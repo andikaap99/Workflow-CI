@@ -118,7 +118,6 @@ def run_modelling(data_dir):
         for k, v in test_metrics.items():
             print(f"  {k}: {v:.4f}")
 
-
 if __name__ == '__main__':
     args = parse_args()
     run_modelling(args.data_dir)
