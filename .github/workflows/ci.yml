@@ -44,6 +44,9 @@ jobs:
           DAGSHUB_USER_TOKEN: ${{ secrets.DAGSHUB_USER_TOKEN }}
         run: |
           RUN_ID=$(cat MLProject/run_id.txt)
+          export MLFLOW_TRACKING_URI=https://dagshub.com/andikaap99/Eksperimen_SML_Andika-Aryadi-Putra.mlflow
+          export MLFLOW_TRACKING_USERNAME=andikaap99
+          export MLFLOW_TRACKING_PASSWORD=${{ secrets.DAGSHUB_USER_TOKEN }}
           mlflow models build-docker \
             --model-uri "runs:/${RUN_ID}/model" \
             --name "coffee-sales-model"
