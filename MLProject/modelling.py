@@ -90,7 +90,7 @@ def run_modelling(data_dir):
     feature_cols = pd.read_csv(f'{data_dir}/X_train.csv').columns.tolist()
 
     mlflow.set_experiment("coffee_sales_forecasting")
-
+    os.environ.pop('MLFLOW_RUN_ID', None)
     with mlflow.start_run(run_name="MLR_baseline_CI"):
         mlflow.sklearn.autolog()
 
