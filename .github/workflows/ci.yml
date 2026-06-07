@@ -43,8 +43,9 @@ jobs:
         env:
           DAGSHUB_USER_TOKEN: ${{ secrets.DAGSHUB_USER_TOKEN }}
         run: |
+          RUN_ID=$(cat MLProject/run_id.txt)
           mlflow models build-docker \
-            --model-uri "runs:/$(cat run_id.txt)/model" \
+            --model-uri "runs:/${RUN_ID}/model" \
             --name "coffee-sales-model"
 
       - name: Push ke Docker Hub
